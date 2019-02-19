@@ -10,6 +10,6 @@ import lombok.Data;
 @Data
 public class ConsumerGroupOffset implements ConsumerGroupOffsetMBean {
 	
-	private long consumerOffset;
+	private long value;
 
 }

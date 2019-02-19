@@ -7,6 +7,6 @@ package org.ianitrix.jmx.exporter;
  */
 public interface ConsumerGroupOffsetMBean {
 		
-	public long getConsumerOffset();
+	public long getValue();
 
 }

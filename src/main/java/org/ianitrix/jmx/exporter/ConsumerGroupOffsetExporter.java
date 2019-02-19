@@ -38,7 +38,7 @@ public class ConsumerGroupOffsetExporter {
 	/**
 	 * Pattern name for the MBEAN name.
 	 */
-	private static final String MBEAN_NAME_PATTERN = "kafka.consumer:type=ConsumerOffset,groupId=%s, topic=%s,partition=%d";
+	private static final String MBEAN_NAME_PATTERN = "kafka.consumer:type=ConsumerOffset,groupId=%s,topic=%s,partition=%d";
 
 	/**
 	 * Registered mbean for the consumer group offset
@@ -106,7 +106,7 @@ public class ConsumerGroupOffsetExporter {
 	private void updateMbean(final String groupId, final TopicPartition topicPartition, final OffsetAndMetadata offset) {
 		final String mbeanName = String.format(MBEAN_NAME_PATTERN, groupId, topicPartition.topic(), topicPartition.partition());
 		final ConsumerGroupOffset consumerGroupOffset = this.getOrCreateConsumerGroupOffset(mbeanName);
-		consumerGroupOffset.setConsumerOffset(offset.offset());
+		consumerGroupOffset.setValue(offset.offset());
 	}
 
 	private final ConsumerGroupOffset getOrCreateConsumerGroupOffset(final String mbeanName) {
