@@ -1,0 +1,9 @@
+lowercaseOutputName: true
+
+rules:
+- pattern: kafka.consumer<type=ConsumerOffset, groupId=(.+), topic=(.+), partition=(.*)><>Value
+  name: kafka_consumer_consumeroffset_$1
+  type: GAUGE
+  labels:
+    topic: "$2"
+    partition: "$3"
