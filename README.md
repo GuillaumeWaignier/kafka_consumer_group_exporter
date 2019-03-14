@@ -29,7 +29,7 @@ export java_option=-javaagent:/jmx_prometheus_javaagent-0.11.0.jar=8080:/config/
 ## Usage (Docker)
 
 ```bash
-docker run -e KAFKAEXPORTER_BOOTSTRAP_SERVERS=kafkaip:9092 -p 8080:8080 <imageName>
+docker run -e KAFKAEXPORTER_BOOTSTRAP_SERVERS=kafkaip:9092 -p 8080:8080 ianitrix/kafka-consumer-group-exporter:0.0.1-jre8
 ```
 
 _Environment variables_
