@@ -25,12 +25,13 @@ fi
 if [ "${use_env}" ]
 then
   echo "#Generated config file" > ${config_file}
+  IFS=$'\n'; 
   for param in `env`
   do
     case ${param} in
       ${variable_prefix}* )
-        key=`echo ${param} | sed -e "s/${variable_prefix}\(.*\)=.*/\1/g" | tr '[:upper:]' '[:lower:]' | sed -e 's/_/./g' `
-        value=`echo ${param} | sed -e 's/.*=\(.*\)/\1/g' `
+        key=`echo ${param} | sed -e "s/^${variable_prefix}\([A-Z_0-9]*\)=.*/\1/g" | tr '[:upper:]' '[:lower:]' | sed -e 's/_/./g' `
+        value=`echo ${param} | sed -e "s/^${variable_prefix}[A-Z_0-9]*=\(.*\)/\1/g" `
         echo ${key}=${value} >> ${config_file}
       ;;
     esac
