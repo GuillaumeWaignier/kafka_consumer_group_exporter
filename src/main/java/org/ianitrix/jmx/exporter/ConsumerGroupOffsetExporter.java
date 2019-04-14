@@ -93,9 +93,7 @@ public class ConsumerGroupOffsetExporter {
 	private Map<TopicPartition, OffsetAndMetadata> getConsumerGroupOffset(final String consumerGroupId) {
 		final ListConsumerGroupOffsetsResult offsets = this.adminClient.listConsumerGroupOffsets(consumerGroupId);
 		try {
-			final Map<TopicPartition, OffsetAndMetadata> offset = offsets.partitionsToOffsetAndMetadata().get();
-
-			return offset;
+			return offsets.partitionsToOffsetAndMetadata().get();
 		} catch (final InterruptedException | ExecutionException e) {
 			log.error("Impossible to get consumer group offset for %s", consumerGroupId, e);
 			return new HashMap<>();
@@ -105,24 +103,19 @@ public class ConsumerGroupOffsetExporter {
 
 	private void updateMbean(final String groupId, final TopicPartition topicPartition, final OffsetAndMetadata offset) {
 		final String mbeanName = String.format(MBEAN_NAME_PATTERN, groupId, topicPartition.topic(), topicPartition.partition());
-		final ConsumerGroupOffset consumerGroupOffset = this.getOrCreateConsumerGroupOffset(mbeanName);
+		final ConsumerGroupOffset consumerGroupOffset = this.registeredConsumerGroupOffsetMbean.computeIfAbsent(mbeanName, beanName -> createConsumerGroupOffset(beanName));
 		consumerGroupOffset.setValue(offset.offset());
 	}
-
-	private final ConsumerGroupOffset getOrCreateConsumerGroupOffset(final String mbeanName) {
-		ConsumerGroupOffset consumerGroupOffset = this.registeredConsumerGroupOffsetMbean.get(mbeanName);
-
-		if (consumerGroupOffset == null) {
-			consumerGroupOffset = new ConsumerGroupOffset();
-			this.registeredConsumerGroupOffsetMbean.put(mbeanName, consumerGroupOffset);
-			try {
-				this.mBeanServer.registerMBean(consumerGroupOffset, new ObjectName(mbeanName));
-			} catch (InstanceAlreadyExistsException | MBeanRegistrationException | NotCompliantMBeanException
-					| MalformedObjectNameException e) {
-				log.error("Impossible to register mbean %s", e);
-			}
+	
+	private ConsumerGroupOffset createConsumerGroupOffset(final String mbeanName) {
+		final ConsumerGroupOffset consumerGroupOffset = new ConsumerGroupOffset();
+		this.registeredConsumerGroupOffsetMbean.put(mbeanName, consumerGroupOffset);
+		try {
+			this.mBeanServer.registerMBean(consumerGroupOffset, new ObjectName(mbeanName));
+		} catch (InstanceAlreadyExistsException | MBeanRegistrationException | NotCompliantMBeanException
+				| MalformedObjectNameException e) {
+			log.error("Impossible to register mbean %s", e);
 		}
-
 		return consumerGroupOffset;
 	}
 
