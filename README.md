@@ -1,4 +1,8 @@
 # kafka_consumer_group_exporter
+
+[![Build status](https://travis-ci.org/GuillaumeWaignier/kafka_consumer_group_exporter.svg?branch=master)](https://travis-ci.org/GuillaumeWaignier/kafka_consumer_group_exporter) 
+
+
 JMX exporter for Kafka Consumer Group Offset
 
 ## Usage (Command line)
