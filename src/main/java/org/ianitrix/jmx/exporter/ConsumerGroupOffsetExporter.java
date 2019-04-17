@@ -33,12 +33,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-public class ConsumerGroupOffsetExporter {
+public class ConsumerGroupOffsetExporter implements Runnable {
 
 	/**
 	 * Pattern name for the MBEAN name.
 	 */
-	private static final String MBEAN_NAME_PATTERN = "kafka.consumer:type=ConsumerOffset,groupId=%s,topic=%s,partition=%d";
+	public static final String MBEAN_NAME_PATTERN = "kafka.consumer:type=ConsumerOffset,groupId=%s,topic=%s,partition=%d";
 
 	/**
 	 * Registered mbean for the consumer group offset
@@ -55,15 +55,27 @@ public class ConsumerGroupOffsetExporter {
 	 */
 	private final AdminClient adminClient;
 	
+	private final int refreshInterval;
+	
 	private boolean isRunning = true;
-
+	
 
 	public ConsumerGroupOffsetExporter(final Properties properties) {
-		this.mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		this.adminClient = KafkaAdminClient.create(properties);
+		this(properties, 5000);
 	}
 	
-	public void start() throws InterruptedException {
+	public ConsumerGroupOffsetExporter(final Properties properties, final int refreshInterval) {
+		this.mBeanServer = ManagementFactory.getPlatformMBeanServer();
+		this.adminClient = KafkaAdminClient.create(properties);
+		this.refreshInterval = refreshInterval;
+	}
+	
+	public void start() {
+		new Thread(this).start();
+	}
+	
+	@Override
+	public void run() {
 		
 		log.info("Started");
 		
@@ -72,9 +84,14 @@ public class ConsumerGroupOffsetExporter {
 			for (final String consumerGroupId : this.listConsumerGroups()) {
 				this.getConsumerGroupOffset(consumerGroupId).entrySet().forEach(offset -> this.updateMbean(consumerGroupId, offset.getKey(), offset.getValue()));
 			}
-			Thread.sleep(5000);
-		}
+			try {
+				Thread.sleep(this.refreshInterval);
+			} catch (final InterruptedException e) {
+				
+			}
+		}	
 	}
+	
 
 	private List<String> listConsumerGroups() {
 		final ListConsumerGroupsResult consumerGroups = this.adminClient.listConsumerGroups();
@@ -82,7 +99,7 @@ public class ConsumerGroupOffsetExporter {
 		try {
 			final List<String> groupIds = consumerGroups.all().get().stream().map(ConsumerGroupListing::groupId)
 					.collect(Collectors.toList());
-			log.debug("All consumer group are : %s", groupIds);
+			log.debug("All consumer group are : {}", groupIds);
 			return groupIds;
 		} catch (final InterruptedException | ExecutionException e) {
 			log.error("Impossible to list all consumer group", e);
@@ -95,7 +112,7 @@ public class ConsumerGroupOffsetExporter {
 		try {
 			return offsets.partitionsToOffsetAndMetadata().get();
 		} catch (final InterruptedException | ExecutionException e) {
-			log.error("Impossible to get consumer group offset for %s", consumerGroupId, e);
+			log.error("Impossible to get consumer group offset for {}", consumerGroupId, e);
 			return new HashMap<>();
 		}
 	}
@@ -105,6 +122,7 @@ public class ConsumerGroupOffsetExporter {
 		final String mbeanName = String.format(MBEAN_NAME_PATTERN, groupId, topicPartition.topic(), topicPartition.partition());
 		final ConsumerGroupOffset consumerGroupOffset = this.registeredConsumerGroupOffsetMbean.computeIfAbsent(mbeanName, beanName -> createConsumerGroupOffset(beanName));
 		consumerGroupOffset.setValue(offset.offset());
+		log.debug("Offset for {} is {}", mbeanName, offset.offset());
 	}
 	
 	private ConsumerGroupOffset createConsumerGroupOffset(final String mbeanName) {
@@ -112,9 +130,10 @@ public class ConsumerGroupOffsetExporter {
 		this.registeredConsumerGroupOffsetMbean.put(mbeanName, consumerGroupOffset);
 		try {
 			this.mBeanServer.registerMBean(consumerGroupOffset, new ObjectName(mbeanName));
+			log.debug("Register MBean {}", mbeanName);
 		} catch (InstanceAlreadyExistsException | MBeanRegistrationException | NotCompliantMBeanException
 				| MalformedObjectNameException e) {
-			log.error("Impossible to register mbean %s", e);
+			log.error("Impossible to register mbean {}", e);
 		}
 		return consumerGroupOffset;
 	}
@@ -125,6 +144,5 @@ public class ConsumerGroupOffsetExporter {
 		this.adminClient.close();
 		log.info("Succesffully Stopped");
 	}
-
 	
 }
