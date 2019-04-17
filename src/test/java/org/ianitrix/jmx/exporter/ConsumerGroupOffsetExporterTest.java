@@ -7,9 +7,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
+import javax.management.AttributeNotFoundException;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanException;
 import javax.management.MBeanServer;
-import javax.management.ObjectInstance;
 import javax.management.ObjectName;
+import javax.management.ReflectionException;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
@@ -20,6 +23,8 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.awaitility.Awaitility;
+import org.awaitility.Duration;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -64,12 +69,10 @@ public class ConsumerGroupOffsetExporterTest {
 
 		final String topicName = "foo";
 		final int numPartitions = 1;
-		final String groupId = "groupId";
+		final String groupId = "test1";
 
 		this.createTopic(topicName, numPartitions);
 		this.setOffsetForPartition(groupId, topicName, 0, 1);
-
-		Thread.sleep(1000);
 		
 		this.checkOffset(groupId, topicName, 0, 1);
 
@@ -103,11 +106,18 @@ public class ConsumerGroupOffsetExporterTest {
 		final String mbeanName = String.format(ConsumerGroupOffsetExporter.MBEAN_NAME_PATTERN, groupId, topicName,
 				partition);
 		final ObjectName objectName = new ObjectName(mbeanName);
-		final ObjectInstance instance = mBeanServer.getObjectInstance(objectName);
+		
 
-		final long value = (long) mBeanServer.getAttribute(instance.getObjectName(), "Value");
-
-		Assertions.assertEquals(offset, value);
+		Awaitility.await().atMost(Duration.FIVE_SECONDS).until(() -> this.getBeanValue(objectName) == offset);
+		
+		Assertions.assertEquals(offset, this.getBeanValue(objectName));
 	}
-
+	
+	private long getBeanValue(final ObjectName objectName) {
+		try {
+			return (long) mBeanServer.getAttribute(objectName, "Value");
+		} catch (final InstanceNotFoundException | AttributeNotFoundException | ReflectionException | MBeanException e) {
+			return -1;
+		}
+	}
 }

@@ -24,6 +24,7 @@
 		<maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
 
 		<!-- dependency versions -->
+		<awaitility.version>3.1.6</awaitility.version>
 		<junit.version>5.4.2</junit.version>
 		<kafka.version>2.1.0</kafka.version>
 		<logback.version>1.2.3</logback.version>
@@ -49,6 +50,7 @@
 			<version>${kafka.version}</version>
 		</dependency>
 
+		<!-- For Test -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -73,6 +75,14 @@
 			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>${awaitility.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+
 	</dependencies>
 
 
