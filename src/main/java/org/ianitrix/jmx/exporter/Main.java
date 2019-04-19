@@ -25,7 +25,7 @@ public class Main {
 		final ConsumerGroupOffsetExporter consumerGroupOffsetExporter = new ConsumerGroupOffsetExporter(
 				loadConfigurationFile(args));
 
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> consumerGroupOffsetExporter.stop()));
+		Runtime.getRuntime().addShutdownHook(new Thread(consumerGroupOffsetExporter::stop));
 
 		consumerGroupOffsetExporter.start();
 	}
