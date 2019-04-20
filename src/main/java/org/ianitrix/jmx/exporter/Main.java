@@ -23,7 +23,7 @@ public class Main {
 		checkArgument(args);
 
 		final ConsumerGroupOffsetExporter consumerGroupOffsetExporter = new ConsumerGroupOffsetExporter(
-				loadConfigurationFile(args));
+				loadConfigurationFile(args[0]));
 
 		Runtime.getRuntime().addShutdownHook(new Thread(consumerGroupOffsetExporter::stop));
 
@@ -37,8 +37,8 @@ public class Main {
 		}
 	}
 
-	private static Properties loadConfigurationFile(String[] args) {
-		final File propertiesFile = new File(args[0]);
+	public static Properties loadConfigurationFile(String file) {
+		final File propertiesFile = new File(file);
 		final Properties properties = new Properties();
 		
 
@@ -46,7 +46,7 @@ public class Main {
 			properties.load(inputStream);
 			return properties;
 		} catch (final FileNotFoundException e) {
-			log.error("Missing configuration file {}", args[0], e);
+			log.error("Missing configuration file {}", file, e);
 			System.exit(1);
 		} catch (final IOException e) {
 			log.error("Error when loading configuration file", e);
