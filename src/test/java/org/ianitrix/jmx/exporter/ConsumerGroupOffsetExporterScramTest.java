@@ -4,6 +4,8 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
+import org.awaitility.Awaitility;
+import org.awaitility.Duration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 
 @Testcontainers
@@ -58,13 +61,13 @@ public class ConsumerGroupOffsetExporterScramTest {
 		final ConsumerGroupOffsetExporter consumerGroupOffsetExporter = new ConsumerGroupOffsetExporter(properties);
 		consumerGroupOffsetExporter.start();
 
-		Thread.sleep(1000);
+
+		Awaitility.await().atMost(Duration.FIVE_SECONDS).until(() -> logContains("Impossible to list all consumer group"));
 
 		Mockito.verify(this.mockAppender, Mockito.atLeastOnce()).doAppend(this.captorLoggingEvent.capture());
 		final LoggingEvent loggingEvent = captorLoggingEvent
 				.getAllValues()
 				.stream()
-				
 				.filter(event -> event.getMessage().startsWith("Impossible to list all consumer group"))
 				.findFirst()
 				.get();
@@ -73,5 +76,20 @@ public class ConsumerGroupOffsetExporterScramTest {
 
 		consumerGroupOffsetExporter.stop();
 
+	}
+
+	private boolean logContains(final String logMessage) {
+		try {
+			Mockito.verify(this.mockAppender, Mockito.atLeastOnce()).doAppend(this.captorLoggingEvent.capture());
+			final LoggingEvent loggingEvent = captorLoggingEvent
+					.getAllValues()
+					.stream()
+					.filter(event -> event.getMessage().startsWith(logMessage))
+					.findFirst()
+					.get();
+			return true;
+		} catch(final NoSuchElementException e) {
+			return false;
+		}
 	}
 }
