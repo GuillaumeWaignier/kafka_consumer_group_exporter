@@ -43,6 +43,7 @@ public class MainTest {
 	@ExpectSystemExitWithStatus(1)
 	public void testWrongParameterNumber() throws InterruptedException {
 		Main.main(new String[0]);
+		Assertions.fail("Exit with status 1 expected");
 	}
 
 	@Test
@@ -61,6 +62,7 @@ public class MainTest {
 	public void testLoadConfigurationFileNotFound() {
 		final File f2 = new File("src/test/resources/config2.properties");
 		Main.loadConfigurationFile(f2.getAbsolutePath());
+		Assertions.fail("Exit with status 1 expected");
 	}
 
 	@Test
