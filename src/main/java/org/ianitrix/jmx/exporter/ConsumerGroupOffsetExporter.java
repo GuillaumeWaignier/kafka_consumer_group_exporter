@@ -101,12 +101,11 @@ public class ConsumerGroupOffsetExporter implements Runnable {
 					.collect(Collectors.toList());
 			log.debug("All consumer group are : {}", groupIds);
 			return groupIds;
-		} catch (final ExecutionException e) {
+		} catch (final ExecutionException | InterruptedException e) {
 			log.error("Impossible to list all consumer group", e);
-			return Collections.emptyList();
-		} catch(final InterruptedException e) {
-			Thread.currentThread().interrupt();
-			log.error("Impossible to list all consumer group", e);
+			if (e instanceof  InterruptedException) {
+				Thread.currentThread().interrupt();
+			}
 			return Collections.emptyList();
 		}
 	}
@@ -115,16 +114,14 @@ public class ConsumerGroupOffsetExporter implements Runnable {
 		final ListConsumerGroupOffsetsResult offsets = this.adminClient.listConsumerGroupOffsets(consumerGroupId);
 		try {
 			return offsets.partitionsToOffsetAndMetadata().get();
-		} catch (final ExecutionException e) {
+		} catch (final ExecutionException | InterruptedException e) {
 			log.error("Impossible to get consumer group offset for {}", consumerGroupId, e);
-			return new HashMap<>();
-		} catch (final InterruptedException e) {
-			log.error("Impossible to get consumer group offset for {}", consumerGroupId, e);
-			Thread.currentThread().interrupt();
+			if (e instanceof  InterruptedException) {
+				Thread.currentThread().interrupt();
+			}
 			return new HashMap<>();
 		}
 	}
-	
 
 	private void updateMbean(final String groupId, final TopicPartition topicPartition, final OffsetAndMetadata offset) {
 		final String mbeanName = String.format(MBEAN_NAME_PATTERN, groupId, topicPartition.topic(), topicPartition.partition());
