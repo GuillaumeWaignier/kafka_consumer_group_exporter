@@ -2,7 +2,6 @@ package org.ianitrix.jmx.exporter;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -30,29 +29,27 @@ public class Main {
 		consumerGroupOffsetExporter.start();
 	}
 
-	private static void checkArgument(String[] args) {
+	private static void checkArgument(final String[] args) {
 		if (args.length != 1) {
-			log.error("Missing argument for configuration file\nCommand line are : java - jar Main.jar config.properties");
-			System.exit(1);
+			exitWithError("Missing argument for configuration file\nCommand line are : java - jar Main.jar config.properties", null);
 		}
 	}
 
-	public static Properties loadConfigurationFile(String file) {
+	public static Properties loadConfigurationFile(final String file) {
 		final File propertiesFile = new File(file);
 		final Properties properties = new Properties();
 		
-
 		try (final FileInputStream inputStream = new FileInputStream(propertiesFile)) {
 			properties.load(inputStream);
-			return properties;
-		} catch (final FileNotFoundException e) {
-			log.error("Missing configuration file {}", file, e);
-			System.exit(1);
 		} catch (final IOException e) {
-			log.error("Error when loading configuration file", e);
-			System.exit(1);
+			exitWithError("Error when loading configuration file " + file, e);
 		}
 		
-		return null;
+		return properties;
+	}
+	
+	private static final void exitWithError(final String errorMessage, final Exception exception) {
+		log.error(errorMessage, exception);
+		System.exit(1);
 	}
 }
