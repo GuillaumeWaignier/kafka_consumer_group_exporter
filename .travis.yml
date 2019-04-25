@@ -9,9 +9,14 @@ addons:
 
 jdk:
   - oraclejdk8
-    
+
+before_script:
+  - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/v0.7.26/install.sh | sudo bash"
+
 script:
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent org.jacoco:jacoco-maven-plugin:report package sonar:sonar
+  - fossa init
+  - fossa analyze
   
 cache:
   directories:
