@@ -29,7 +29,16 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-  
+  - provider: script
+    skip_cleanup: true
+    script: bash docker_push $TRAVIS_BRANCH
+    on:
+      tags: true
+  - provider: script
+    skip_cleanup: true
+    script: bash docker_push LATEST
+    on:
+      branch: master
 
 
 cache:
