@@ -36,7 +36,7 @@ deploy:
       tags: true
   - provider: script
     skip_cleanup: true
-    script: bash docker_push.sh LATEST
+    script: bash docker_push.sh latest
     on:
       branch: master
 
