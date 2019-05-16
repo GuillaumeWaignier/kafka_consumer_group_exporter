@@ -31,12 +31,12 @@ deploy:
       tags: true
   - provider: script
     skip_cleanup: true
-    script: bash docker_push $TRAVIS_BRANCH
+    script: bash docker_push.sh $TRAVIS_BRANCH
     on:
       tags: true
   - provider: script
     skip_cleanup: true
-    script: bash docker_push LATEST
+    script: bash docker_push.sh LATEST
     on:
       branch: master
 
