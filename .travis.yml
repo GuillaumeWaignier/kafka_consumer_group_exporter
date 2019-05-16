@@ -15,20 +15,22 @@ before_script:
 
 script:
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent org.jacoco:jacoco-maven-plugin:report package sonar:sonar
-  - fossa init
-  - fossa analyze
+  - docker build . -t $TRAVIS_COMMIT
 
 deploy:
-  provider: releases
-  api_key:
-    secure: Edy32MeLRfwAzp6RGVI8Yc48URPhAXbAqiPp5SdGUdZRT41DN0bXI8cNT7fVgmdxYTfiLUxOs85GQKWkUQFzpLKOWNYKwbemdBDlJmgjL93+H4IwU5OApnIvnWDMoKNU8EjgaB7KgvwFpFpUsnZq86J0tNB+g64TuU+JemK1Pvn3ozevIECaglcCbitJmb1YRyLgZF0Tuz6DOXYCD7oZ2pGsakQWBe0PynGQw8Sov45IMXY4298RSOikCrqsZ3DngidXMs/L/An3rSi3wZwXTeJ2VcC3Lj9xEPYrIi8WErc9kg3F3qL1vTtxIIVn3ZCd/RT0AI8+G/HVBBWJLdNVRmp2xUge4YSlU8jcwhpdxYPw/fI7Wm5JwCKDBy8KOHew+k3ei++WWQYhe8QlKepeQh44aSQUQjhdMZncW2cEpaqMX+GvADOV3k73+AYO41Cbc7T2PkwhCxHDANO+We/sOIIGn85SOwQgb0LArufF3qW49TU/vKCRg7Yeh74ZNh97QjGc5wEiiMz2ckuMC+SX7J8du4cupA0u+g7kbg3kEsnw8Au9/7JrbMYA6LVfAkk5VoTxmKaYehqYBAihzV6h8jNnM6g5U07hp/HTEfr0c1iXplJS6P+xJyb2Zgn91VbIoOUh4gU7FZxmW1ZPVuEzhbgbruqisLRfjzonwSEdlD8=
-  file: target/consumer-offset-exporter-*-bin.tar.gz
-  prerelease: true
-  name: "$TRAVIS_TAG"
-  file_glob: true
-  skip_cleanup: true
-  on:
-    tags: true
+  - provider: releases
+    api_key:
+      secure: Edy32MeLRfwAzp6RGVI8Yc48URPhAXbAqiPp5SdGUdZRT41DN0bXI8cNT7fVgmdxYTfiLUxOs85GQKWkUQFzpLKOWNYKwbemdBDlJmgjL93+H4IwU5OApnIvnWDMoKNU8EjgaB7KgvwFpFpUsnZq86J0tNB+g64TuU+JemK1Pvn3ozevIECaglcCbitJmb1YRyLgZF0Tuz6DOXYCD7oZ2pGsakQWBe0PynGQw8Sov45IMXY4298RSOikCrqsZ3DngidXMs/L/An3rSi3wZwXTeJ2VcC3Lj9xEPYrIi8WErc9kg3F3qL1vTtxIIVn3ZCd/RT0AI8+G/HVBBWJLdNVRmp2xUge4YSlU8jcwhpdxYPw/fI7Wm5JwCKDBy8KOHew+k3ei++WWQYhe8QlKepeQh44aSQUQjhdMZncW2cEpaqMX+GvADOV3k73+AYO41Cbc7T2PkwhCxHDANO+We/sOIIGn85SOwQgb0LArufF3qW49TU/vKCRg7Yeh74ZNh97QjGc5wEiiMz2ckuMC+SX7J8du4cupA0u+g7kbg3kEsnw8Au9/7JrbMYA6LVfAkk5VoTxmKaYehqYBAihzV6h8jNnM6g5U07hp/HTEfr0c1iXplJS6P+xJyb2Zgn91VbIoOUh4gU7FZxmW1ZPVuEzhbgbruqisLRfjzonwSEdlD8=
+    file: target/consumer-offset-exporter-*-bin.tar.gz
+    prerelease: true
+    draft: true
+    name: "$TRAVIS_TAG"
+    file_glob: true
+    skip_cleanup: true
+    on:
+      tags: true
+  
+
 
 cache:
   directories:
