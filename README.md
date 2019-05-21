@@ -42,6 +42,12 @@ All kafka configuration is done with environment variables prefixed with **KAFKA
 
 All dot is replaced by underscore and the variable name must be in upper case.
 
+## Helm
+
+You can use the helm chart to deploy it into Kubernetes cluster.
+See [the documentation](https://github.com/GuillaumeWaignier/kafka_consumer_group_exporter_helm_charts). 
+
+
 ## Compute lag with prometheus
 
 You need to already collect the log end offset by using the kafka broker metric.
