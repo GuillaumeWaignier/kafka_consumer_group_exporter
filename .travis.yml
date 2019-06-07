@@ -8,7 +8,7 @@ addons:
       secure: "faMXktVO8Kq/bmzES8SdBl8gFF01BqC4Um69xN+XimFpIXtkPG6CnwbUzfN6Jo1fD06lRKHjq3fjSc7Nj3hvpxAty+fNoHJumNnGMoDJy2K+5zJ7fQOJ7Zmly/dacq1NB+01fQeEwkftUvy91Khc/iR3k8nIK8TPliGKwmjWh8fgmCxdCfaIPSTcRdVexZZrRWw9yTfLaAJ/ZIAdEKjE52vQmP6iKDWqbkyCNHmitxwJzXEsgrvxBqHvNdEoAD0Zmz03EBvPuM4v9YN9EqRJB66bNc4O0NAb6+hU314WU7sWvYDnkzgGDG8yYG0APbYA+b/g7rWM+LlHqw40zS6B2uywrjiBjJwuzRLr7HH/sGHziik00dGQoJ6U+4YOIo8qukfAQzzZXH2NMLUBxRWmZVLSIhsDTVt6IwpaHkE2DUWeMRmtWKZsYGudiTjBGLY8GfEak4x3Pg5/jxBMJft6yJN0d7mDYW4Wi5SZl9f3R0vwbUhMaWAYdw3KM3HUHzSwVOQuPPkHJiCNeadMYWnAWKNRfpjatzZ9sbycSGoM3mBBA3TCMgQZJLujO0sUVw147GXPbP68Z0Ft6Mf0Syul8WNnOjMWmYmK2qP4v9f9yX8w0vOWRRtI/bwkJ5J6lSpCWkt87KnF7LXyz0QcTnCiD0y/Zm4csXK3w1J1HiFww58="
 
 jdk:
-  - oraclejdk8
+  - openjdk11
 
 before_script:
   - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/v0.7.26/install.sh | sudo bash"
