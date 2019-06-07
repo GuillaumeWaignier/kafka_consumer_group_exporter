@@ -9,11 +9,10 @@
 	</appender>
 
 
-	<logger name="org.ianitrix.jmx.exporter" level="${LOG_LEVEL}" additivity="false">
-		<appender-ref ref="STDOUT"/>
-	</logger>
+	<logger name="org.ianitrix.jmx.exporter" level="${LOG_LEVEL}"/>
 
-	<root level="INFO">
+	<root>
+		<level value="INFO" />
 		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>
