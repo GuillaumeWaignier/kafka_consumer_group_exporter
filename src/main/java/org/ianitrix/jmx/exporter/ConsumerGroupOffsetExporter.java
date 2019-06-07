@@ -131,7 +131,6 @@ public class ConsumerGroupOffsetExporter implements Runnable {
 	
 	private ConsumerGroupOffset createConsumerGroupOffset(final String mbeanName) {
 		final ConsumerGroupOffset consumerGroupOffset = new ConsumerGroupOffset();
-		this.registeredConsumerGroupOffsetMbean.put(mbeanName, consumerGroupOffset);
 		try {
 			this.mBeanServer.registerMBean(consumerGroupOffset, new ObjectName(mbeanName));
 			log.debug("Register MBean {}", mbeanName);

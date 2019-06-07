@@ -1,5 +1,8 @@
 package org.ianitrix.jmx.exporter;
 
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.Appender;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
@@ -12,13 +15,12 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.awaitility.Awaitility;
 import org.awaitility.Duration;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 import javax.management.*;
 import java.lang.management.ManagementFactory;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 
@@ -81,6 +83,21 @@ public final class Utils {
 			return (long) mBeanServer.getAttribute(objectName, "Value");
 		} catch (final InstanceNotFoundException | AttributeNotFoundException | ReflectionException | MBeanException e) {
 			return -1;
+		}
+	}
+
+	public static boolean logContains(final Appender<ILoggingEvent> mockAppender, final ArgumentCaptor<LoggingEvent> captorLoggingEvent, final String logMessage) {
+		try {
+			Mockito.verify(mockAppender, Mockito.atLeastOnce()).doAppend(captorLoggingEvent.capture());
+			final LoggingEvent loggingEvent = captorLoggingEvent
+					.getAllValues()
+					.stream()
+					.filter(event -> event.getFormattedMessage().startsWith(logMessage))
+					.findFirst()
+					.get();
+			return true;
+		} catch(final NoSuchElementException e) {
+			return false;
 		}
 	}
 }

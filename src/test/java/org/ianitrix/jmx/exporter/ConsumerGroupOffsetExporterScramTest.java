@@ -62,7 +62,7 @@ public class ConsumerGroupOffsetExporterScramTest {
 		consumerGroupOffsetExporter.start();
 
 
-		Awaitility.await().atMost(Duration.FIVE_SECONDS).until(() -> logContains("Impossible to list all consumer group"));
+		Awaitility.await().atMost(Duration.FIVE_SECONDS).until(() -> Utils.logContains(this.mockAppender, this.captorLoggingEvent,"Impossible to list all consumer group"));
 
 		Mockito.verify(this.mockAppender, Mockito.atLeastOnce()).doAppend(this.captorLoggingEvent.capture());
 		final LoggingEvent loggingEvent = captorLoggingEvent
@@ -78,18 +78,5 @@ public class ConsumerGroupOffsetExporterScramTest {
 
 	}
 
-	private boolean logContains(final String logMessage) {
-		try {
-			Mockito.verify(this.mockAppender, Mockito.atLeastOnce()).doAppend(this.captorLoggingEvent.capture());
-			final LoggingEvent loggingEvent = captorLoggingEvent
-					.getAllValues()
-					.stream()
-					.filter(event -> event.getMessage().startsWith(logMessage))
-					.findFirst()
-					.get();
-			return true;
-		} catch(final NoSuchElementException e) {
-			return false;
-		}
-	}
+
 }
