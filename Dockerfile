@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:11.0.3-slim
 
 ARG PROMETHEUS_VERSION=0.11.0
 
