@@ -23,7 +23,7 @@ import java.util.Properties;
 public class ConsumerGroupOffsetExporterScramTest {
 
 	@Container
-	private static final KafkaContainer kafka = new KafkaContainer("5.1.1")
+	private static final KafkaContainer kafka = new KafkaContainer(Utils.CONFLUENT_VERSION)
 			.withEnv("sasl.enabled.mechanisms", "SCRAM-SHA-512")
 			.withEnv("sasl.mechanism.inter.broker.protocol","SCRAM-512")
 			.withEnv("security.inter.broker.protocol","SASL_PLAINTEXT")

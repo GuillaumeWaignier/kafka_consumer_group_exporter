@@ -14,7 +14,7 @@ import java.util.Properties;
 public class ConsumerGroupOffsetExporterTest {
 
 	@Container
-	private static final KafkaContainer kafka = new KafkaContainer("5.1.1");
+	private static final KafkaContainer kafka = new KafkaContainer(Utils.CONFLUENT_VERSION);
 
 	private static ConsumerGroupOffsetExporter consumerGroupOffsetExporter;
 

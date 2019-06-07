@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 
 public final class Utils {
 
+	public static final String CONFLUENT_VERSION = "5.2.1";
 
 	private static final MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 
