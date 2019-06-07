@@ -3,6 +3,8 @@ package org.ianitrix.jmx.exporter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Properties;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ public class Main {
 
 	public static void main(String[] args) throws InterruptedException {
 		log.info("Starting ...");
+		final Instant startTime = Instant.now();
 
 		checkArgument(args);
 
@@ -27,6 +30,10 @@ public class Main {
 		Runtime.getRuntime().addShutdownHook(new Thread(consumerGroupOffsetExporter::stop));
 
 		consumerGroupOffsetExporter.start();
+
+		final Instant endTime = Instant.now();
+		log.info("Started in {} ms", Duration.between(startTime, endTime).toMillis());
+
 	}
 
 	private static void checkArgument(final String[] args) {

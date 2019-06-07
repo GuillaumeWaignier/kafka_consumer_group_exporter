@@ -1,6 +1,8 @@
 package org.ianitrix.jmx.exporter;
 
 import java.lang.management.ManagementFactory;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -76,9 +78,6 @@ public class ConsumerGroupOffsetExporter implements Runnable {
 	
 	@Override
 	public void run() {
-		
-		log.info("Started");
-		
 		while (this.isRunning) {
 
 			for (final String consumerGroupId : this.listConsumerGroups()) {
@@ -144,10 +143,12 @@ public class ConsumerGroupOffsetExporter implements Runnable {
 	}
 
 	public void stop() {
+		final Instant startDate = Instant.now();
 		log.info("Stopping ...");
 		this.isRunning = false;
 		this.adminClient.close();
-		log.info("Succesffully Stopped");
+		final Instant endDate = Instant.now();
+		log.info("Succesffully Stopped in {} ms", Duration.between(startDate, endDate).toMillis());
 	}
 	
 }
