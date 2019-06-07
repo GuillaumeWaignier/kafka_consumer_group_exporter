@@ -12,6 +12,8 @@ RUN  echo "install consumer-offset-exporter" \
   && rm /consumer-offset-exporter-*-bin.tar.gz \
   && ln -s /consumer-offset-exporter-* /consumer-offset-exporter \
   && echo "install JMX exporter for Java" \
+  && apt-get update \
+  && apt-get install wget -y \
   && wget -O /consumer-offset-exporter/jmx_prometheus_javaagent.jar https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/${PROMETHEUS_VERSION}/jmx_prometheus_javaagent-${PROMETHEUS_VERSION}.jar \
   && chmod 644 /consumer-offset-exporter/jmx_prometheus_javaagent.jar
 
