@@ -147,7 +147,7 @@ public class ConsumerGroupOffsetExporter implements Runnable {
 		this.isRunning = false;
 		this.adminClient.close();
 		final Instant endDate = Instant.now();
-		log.info("Succesffully Stopped in {} ms", Duration.between(startDate, endDate).toMillis());
+		log.info("Successfully Stopped in {} ms", Duration.between(startDate, endDate).toMillis());
 	}
 	
 }
