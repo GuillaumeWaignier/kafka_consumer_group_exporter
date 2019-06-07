@@ -4,6 +4,9 @@ base_dir=$(dirname $0)
 
 variable_prefix="KAFKAEXPORTER_"
 
+IFS="
+"
+
 # Read command line
 if [ "$#" -eq 0 ]
 then
@@ -25,7 +28,6 @@ fi
 if [ "${use_env}" ]
 then
   echo "#Generated config file" > ${config_file}
-  IFS=$'\n'; 
   for param in `env`
   do
     case ${param} in
