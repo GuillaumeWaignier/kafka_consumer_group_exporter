@@ -33,7 +33,7 @@ export java_option=-javaagent:/jmx_prometheus_javaagent-0.11.0.jar=8080:/config/
 ## Usage (Docker)
 
 ```bash
-docker run -e KAFKAEXPORTER_BOOTSTRAP_SERVERS=kafkaip:9092 -p 8080:8080 ianitrix/kafka-consumer-group-exporter:0.0.1-jre8
+docker run -e KAFKAEXPORTER_BOOTSTRAP_SERVERS=kafkaip:9092 -p 8080:8080 ianitrix/kafka-consumer-group-exporter:v0.0.2
 ```
 
 _Environment variables_
@@ -54,4 +54,13 @@ You need to already collect the log end offset by using the kafka broker metric.
 
 ```bash
 sum(max(kafka_log_end_offset) by (partition, topic) by (partition, topic) - on (topic, partition) group_right kafka_consumer_offset) by (topic, groupId)
+```
+
+### Log Level
+
+You can set log level with environment variable: **LOG_LEVEL**
+Allowed value are: **DEBUG**, **INFO**, **WARN**, **ERROR**
+
+```bash
+export LOG_LEVEL=INFO
 ```
