@@ -52,9 +52,14 @@ See [the documentation](https://github.com/GuillaumeWaignier/kafka_consumer_grou
 
 You need to already collect the log end offset by using the kafka broker metric.
 
-```bash
-sum(max(kafka_log_end_offset) by (partition, topic) - on (topic, partition) group_right kafka_consumer_consumeroffset) by (topic, groupId)
+```yaml
+- record: kafka_lag
+  expr: sum(max(kafka_log_end_offset) by (partition, topic) - on (topic, partition) group_right kafka_consumer_consumeroffset) by (topic, groupid)
 ```
+
+If the expression does not work, carefully check the metric:
+- kafka_log_end_offset: check its name and the properties names corresponding to *partition* and *topic*
+- kafka_consumer_consumeroffset: check its name and the properties names corresponding to *topic* and *groupid*
 
 ### Log Level
 
