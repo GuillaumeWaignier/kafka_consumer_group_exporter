@@ -53,7 +53,7 @@ See [the documentation](https://github.com/GuillaumeWaignier/kafka_consumer_grou
 You need to already collect the log end offset by using the kafka broker metric.
 
 ```bash
-sum(max(kafka_log_end_offset) by (partition, topic) by (partition, topic) - on (topic, partition) group_right kafka_consumer_offset) by (topic, groupId)
+sum(max(kafka_log_end_offset) by (partition, topic) - on (topic, partition) group_right kafka_consumer_consumeroffset) by (topic, groupId)
 ```
 
 ### Log Level
