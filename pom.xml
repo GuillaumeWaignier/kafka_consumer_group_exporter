@@ -5,7 +5,7 @@
 
 	<groupId>org.ianitrix.kafka</groupId>
 	<artifactId>consumer-offset-exporter</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>consumer-offset-exporter</name>
