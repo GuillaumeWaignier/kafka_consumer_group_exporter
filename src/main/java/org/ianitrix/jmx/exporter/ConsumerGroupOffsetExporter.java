@@ -124,7 +124,14 @@ public class ConsumerGroupOffsetExporter implements Runnable {
 
 	private void updateMbean(final String groupId, final TopicPartition topicPartition, final OffsetAndMetadata offset) {
 		final String mbeanName = String.format(MBEAN_NAME_PATTERN, groupId, topicPartition.topic(), topicPartition.partition());
-		final ConsumerGroupOffset consumerGroupOffset = this.registeredConsumerGroupOffsetMbean.computeIfAbsent(mbeanName, this::createConsumerGroupOffset);
+
+		// compute if absent
+		ConsumerGroupOffset consumerGroupOffset = this.registeredConsumerGroupOffsetMbean.get(mbeanName);
+		if (consumerGroupOffset == null ) {
+			consumerGroupOffset = this.createConsumerGroupOffset(mbeanName);
+			this.registeredConsumerGroupOffsetMbean.put(mbeanName, consumerGroupOffset);
+		}
+
 		consumerGroupOffset.setValue(offset.offset());
 		log.debug("Offset for {} is {}", mbeanName, offset.offset());
 	}
