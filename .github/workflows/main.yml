@@ -61,8 +61,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./target/consumer-offset-exporter-${{ github.ref }}-bin.tar.gz
-        asset_name: consumer-offset-exporter-${{ github.ref }}-bin.tar.gz
+        asset_path: ./target/consumer-offset-exporter-*-bin.tar.gz
+        asset_name: consumer-offset-exporter-*-bin.tar.gz
         asset_content_type: application/gzip
       
      
