@@ -48,7 +48,7 @@ jobs:
     # Compute version
     - name: Compute version of release
       id: versionName
-      run: echo "::set-output name=versionName::`echo {{ steps.fileName.outputs.archiveFileName }} | cut -d'-' -f4`"
+      run: echo "::set-output name=versionName::`echo ${{ steps.fileName.outputs.archiveFileName }} | cut -d'-' -f4`"
     
     
     # Create GitHub release
