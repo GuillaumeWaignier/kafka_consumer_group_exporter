@@ -15,8 +15,8 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: compute
-      run: export A=21
+      run: echo 21 > /tmp/test
       
     - name: show
-      run: echo $A
+      run: cat /tmp/test
     
