@@ -52,7 +52,14 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: true
         prerelease: true
-        
+    
+    # Compute archive file name
+    - name: Compute archive file name
+      id: fileName
+      run: |
+        export fileName=`ls ./target/consumer-offset-exporter-*-bin.tar.gz`
+        echo "::set-output name=ArchiveileName::$fileName"
+    
     # Upload Archive
     - name: Upload Release Archive
       id: upload-release-asset 
@@ -61,8 +68,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./target/consumer-offset-exporter-*-bin.tar.gz
-        asset_name: consumer-offset-exporter-*-bin.tar.gz
+        asset_path: ${{ steps.fileName.outputs.fileName }}
+        asset_name: consumer-offset-exporter-bin.tar.gz
         asset_content_type: application/gzip
       
      
