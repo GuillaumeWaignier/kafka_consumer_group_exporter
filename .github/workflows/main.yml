@@ -56,9 +56,7 @@ jobs:
     # Compute archive file name
     - name: Compute archive file name
       id: fileName
-      run: |
-        export fileName=`ls ./target/consumer-offset-exporter-*-bin.tar.gz`
-        echo "::set-output name=ArchiveileName::$fileName"
+      run: echo "::set-output name=ArchiveileName::test `ls`"
     
     # Upload Archive
     - name: Upload Release Archive
