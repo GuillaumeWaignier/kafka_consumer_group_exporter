@@ -40,7 +40,17 @@ jobs:
          repository: ianitrix/kafka-consumer-group-exporter
          tag_with_ref: true
  
- 
+    # Compute archive file name
+    - name: Compute archive file name
+      id: fileName
+      run: echo "::set-output name=archiveFileName::`ls target/*bin.tar.gz | cut -d'/' -f2`"
+    
+    # Compute version
+    - name: Compute version of release
+      id: versionName
+      run: echo "::set-output name=versionName::`echo {{ steps.fileName.outputs.archiveFileName }} | cut -d'-' -f4`"
+    
+    
     # Create GitHub release
     - name: Create Release
       id: create_release
@@ -49,14 +59,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        release_name: v${{ steps.versionName.outputs.versionName }}
         draft: true
         prerelease: true
     
-    # Compute archive file name
-    - name: Compute archive file name
-      id: fileName
-      run: echo "::set-output name=archiveFileName::`ls target/*bin.tar.gz`"
     
     # Upload Archive
     - name: Upload Release Archive
@@ -66,8 +72,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.fileName.outputs.archiveFileName }}
-        asset_name: consumer-offset-exporter-bin.tar.gz
+        asset_path: target/${{ steps.fileName.outputs.archiveFileName }}
+        asset_name: ${{ steps.fileName.outputs.archiveFileName }}
         asset_content_type: application/gzip
       
      
