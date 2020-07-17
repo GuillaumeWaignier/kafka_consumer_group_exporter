@@ -56,7 +56,7 @@ jobs:
     # Compute archive file name
     - name: Compute archive file name
       id: fileName
-      run: echo "::set-output name=ArchiveileName::test `ls`"
+      run: echo "::set-output name=archiveFileName::`ls target/*bin.tar.gz`"
     
     # Upload Archive
     - name: Upload Release Archive
@@ -66,7 +66,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.fileName.outputs.fileName }}
+        asset_path: ${{ steps.fileName.outputs.archiveFileName }}
         asset_name: consumer-offset-exporter-bin.tar.gz
         asset_content_type: application/gzip
       
