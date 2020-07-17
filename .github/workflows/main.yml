@@ -33,11 +33,36 @@ jobs:
     
     # Push docker image (master=latest)
     - name: Push to Docker Hub
-      if: github.ref == 'refs/heads/master'
       uses: docker/build-push-action@v1
       with:
          username: ${{ secrets.DOCKER_USERNAME }}
          password: ${{ secrets.DOCKER_PASSWORD }}
          repository: ianitrix/kafka-consumer-group-exporter
          tag_with_ref: true
-
+ 
+ 
+    # Create GitHub release
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: true
+        prerelease: true
+        
+    # Upload Archive
+    - name: Upload Release Archive
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./target/consumer-offset-exporter-${{ github.ref }}-bin.tar.gz
+        asset_name: consumer-offset-exporter-${{ github.ref }}-bin.tar.gz
+        asset_content_type: application/gzip
+      
+     
