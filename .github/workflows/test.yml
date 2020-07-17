@@ -15,8 +15,9 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: compute
-      run: echo 21 > /tmp/test
+      id: compute
+      run: echo "::set-output name=test::hello"
       
     - name: show
-      run: cat /tmp/test
+      run: echo ${{ steps.compute.outputs.test }}
     
