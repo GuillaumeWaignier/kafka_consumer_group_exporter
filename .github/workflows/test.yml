@@ -16,7 +16,7 @@ jobs:
     
     - name: compute
       id: compute
-      run: echo "::set-output name=test::hello"
+      run: echo "::set-output name=test::hello `ls`"
       
     - name: show
       run: echo ${{ steps.compute.outputs.test }}
