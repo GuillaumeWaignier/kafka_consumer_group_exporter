@@ -1,6 +1,7 @@
 # kafka_consumer_group_exporter
 
-[![Build status](https://travis-ci.org/GuillaumeWaignier/kafka_consumer_group_exporter.svg?branch=master)](https://travis-ci.org/GuillaumeWaignier/kafka_consumer_group_exporter) [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.ianitrix.kafka%3Aconsumer-offset-exporter&metric=alert_status)](https://sonarcloud.io/dashboard/index/org.ianitrix.kafka:consumer-offset-exporter)
+![Build](https://github.com/GuillaumeWaignier/kafka_consumer_group_exporter/workflows/Build/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GuillaumeWaignier_kafka_consumer_group_exporter&metric=alert_status)](https://sonarcloud.io/dashboard?id=GuillaumeWaignier_kafka_consumer_group_exporter)
 
 
 JMX exporter for Kafka Consumer Group Offset
