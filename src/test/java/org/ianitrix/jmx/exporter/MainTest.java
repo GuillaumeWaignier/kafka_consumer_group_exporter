@@ -21,7 +21,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 
-public class MainTest {
+class MainTest {
 
 	/** Mocked appender */
 	@Mock
@@ -41,13 +41,13 @@ public class MainTest {
 
 	@Test
 	@ExpectSystemExitWithStatus(1)
-	public void testWrongParameterNumber() throws InterruptedException {
+	void testWrongParameterNumber() throws InterruptedException {
 		Main.main(new String[0]);
 		Assertions.fail("Exit with status 1 expected");
 	}
 
 	@Test
-	public void testLoadConfigurationFile() {
+	void testLoadConfigurationFile() {
 
 		final File f2 = new File("src/test/resources/config.properties");
 
@@ -59,14 +59,14 @@ public class MainTest {
 
 	@Test
 	@ExpectSystemExitWithStatus(1)
-	public void testLoadConfigurationFileNotFound() {
+	void testLoadConfigurationFileNotFound() {
 		final File f2 = new File("src/test/resources/config2.properties");
 		Main.loadConfigurationFile(f2.getAbsolutePath());
 		Assertions.fail("Exit with status 1 expected");
 	}
 
 	@Test
-	public void testSuccessStart() throws InterruptedException {
+	void testSuccessStart() throws InterruptedException {
 		final File f2 = new File("src/test/resources/config.properties");
 		Main.main(new String[] { f2.getAbsolutePath() });
 		
