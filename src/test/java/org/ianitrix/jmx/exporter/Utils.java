@@ -13,13 +13,13 @@ import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.awaitility.Awaitility;
-import org.awaitility.Duration;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import javax.management.*;
 import java.lang.management.ManagementFactory;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -73,7 +73,7 @@ public final class Utils {
 		final ObjectName objectName = new ObjectName(mbeanName);
 		
 
-		Awaitility.await().atMost(Duration.FIVE_SECONDS).until(() -> getBeanValue(objectName) == offset);
+		Awaitility.await().atMost(Duration.ofMinutes(5)).until(() -> getBeanValue(objectName) == offset);
 		
 		Assertions.assertEquals(offset, getBeanValue(objectName));
 	}

@@ -6,7 +6,6 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.awaitility.Awaitility;
-import org.awaitility.Duration;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.Duration;
 import java.util.Properties;
 
 @Testcontainers
@@ -74,7 +74,7 @@ class ConsumerGroupOffsetExporterTest {
 		Utils.checkOffset(groupId, topicName, 0, 5);
 
 		// Check log
-		Awaitility.await().atMost(Duration.FIVE_MINUTES).until(() -> Utils.logContains(this.mockAppender, this.captorLoggingEvent, "Offset for kafka.consumer:type=ConsumerOffset,groupId=test1,topic=foo,partition=0 is 5"));
+		Awaitility.await().atMost(Duration.ofMinutes(5)).until(() -> Utils.logContains(this.mockAppender, this.captorLoggingEvent, "Offset for kafka.consumer:type=ConsumerOffset,groupId=test1,topic=foo,partition=0 is 5"));
 
 		// Check bean is registered only one time
 		Mockito.verify(this.mockAppender, Mockito.atLeastOnce()).doAppend(this.captorLoggingEvent.capture());

@@ -5,7 +5,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import org.awaitility.Awaitility;
-import org.awaitility.Duration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
@@ -62,7 +62,7 @@ class ConsumerGroupOffsetExporterScramTest {
 		consumerGroupOffsetExporter.start();
 
 
-		Awaitility.await().atMost(Duration.FIVE_SECONDS).until(() -> Utils.logContains(this.mockAppender, this.captorLoggingEvent,"Impossible to list all consumer group"));
+		Awaitility.await().atMost(Duration.ofMinutes(5)).until(() -> Utils.logContains(this.mockAppender, this.captorLoggingEvent,"Impossible to list all consumer group"));
 
 		Mockito.verify(this.mockAppender, Mockito.atLeastOnce()).doAppend(this.captorLoggingEvent.capture());
 		final LoggingEvent loggingEvent = captorLoggingEvent
