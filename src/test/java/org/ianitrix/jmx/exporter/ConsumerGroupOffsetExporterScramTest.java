@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 
 @Testcontainers
-public class ConsumerGroupOffsetExporterScramTest {
+class ConsumerGroupOffsetExporterScramTest {
 
 	@Container
 	private static final KafkaContainer kafka = new KafkaContainer(Utils.CONFLUENT_VERSION)
@@ -50,7 +50,7 @@ public class ConsumerGroupOffsetExporterScramTest {
 	}
 
 	@Test
-	public void testWithWrongRight() throws Exception {
+	void testWithWrongRight() throws Exception {
 
 		final Properties properties = new Properties();
 		properties.put("bootstrap.servers","localhost:9093");
