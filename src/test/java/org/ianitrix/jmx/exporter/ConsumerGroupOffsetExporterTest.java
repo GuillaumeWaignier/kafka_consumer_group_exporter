@@ -17,7 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.Properties;
 
 @Testcontainers
-public class ConsumerGroupOffsetExporterTest {
+class ConsumerGroupOffsetExporterTest {
 
 	@Container
 	private static final KafkaContainer kafka = new KafkaContainer(Utils.CONFLUENT_VERSION);
@@ -58,7 +58,7 @@ public class ConsumerGroupOffsetExporterTest {
 	}
 	
 	@Test
-	public void testForOnePartition() throws Exception {
+	void testForOnePartition() throws Exception {
 
 		final String topicName = "foo";
 		final int numPartitions = 1;
