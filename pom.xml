@@ -40,7 +40,7 @@
 		<kafka.version>2.4.1</kafka.version>
 		<logback.version>1.2.3</logback.version>
 		<lombok.version>1.18.16</lombok.version>
-		<testcontainers.version>1.15.1</testcontainers.version>
+		<testcontainers.version>1.15.2</testcontainers.version>
 	</properties>
 
 	<dependencies>
