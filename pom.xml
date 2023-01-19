@@ -37,7 +37,7 @@
 		<awaitility.version>4.0.3</awaitility.version>
 		<junit.version>5.7.0</junit.version>
 		<junit5-system-exit.version>1.0.0</junit5-system-exit.version>
-		<kafka.version>2.4.1</kafka.version>
+		<kafka.version>3.3.2</kafka.version>
 		<logback.version>1.2.3</logback.version>
 		<lombok.version>1.18.16</lombok.version>
 		<testcontainers.version>1.15.1</testcontainers.version>
